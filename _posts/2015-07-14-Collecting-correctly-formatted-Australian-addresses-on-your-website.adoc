@@ -20,6 +20,7 @@ When the list is suitably small enough for the customer to see their street addr
 
 The underlying code sends the full returned information for storage on the server. The client loads this to a Google Map to visualise campaign effectiveness and concentrations of customers.
 
+image::<address-validation-kleber-3.gif>[]
 
 Get your request key from
 http://kleber.datatools.com.au/setup-kleber/
