@@ -1,4 +1,4 @@
-# Correctly formatted, validated Australian addresses on your website
+# Collecting correctly formatted Australian addresses on your website
 
 Obtaining correctly formatted, validated, clean Australian addresses through your online store.
 
@@ -10,7 +10,7 @@ Why bother with correct addresses?
 
 - Having an accurate customer list builds business value.
 
-Using DataTools Kleber for correct Australian address verification in an online store ensures that addresses you capture can be delivered to and used for customer contact in the future. 
+Integrating the DataTools Kleber address capture and correction API for Australian address verification in an online store ensures that addresses you capture can be delivered to and used for customer contact in the future. 
 
 Obtaining a unique residential identifier can be useful for business domain requirements also - In the client’s case, ensuring a new customer is indeed a new customer when offering significant onboarding discounts.
 
