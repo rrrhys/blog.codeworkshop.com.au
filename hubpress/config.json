@@ -1,10 +1,1 @@
-{
-  "meta": {
-    "username": "rrrhys",
-    "repositoryName": "blog.codeworkshop.com.au",
-    "branch": "gh-pages"
-  },
-  "theme": {
-    "name": "Casper"
-  }
-}
+{"meta":{"username":"rrrhys","repositoryName":"blog.codeworkshop.com.au","branch":"gh-pages","cname":"blog.codeworkshop.com.au"},"site":{"title":"Code Workshop","cover":"http://www.codeworkshop.com.au/assets/img/bg/bg2.jpg","googleAnalytics":"UA-18545212-13","url":"http://blog.codeworkshop.com.au"},"socialnetwork":{"email":"rwilliams@codeworkshop.com.au","twitter":"@rrrhys"},"theme":{"name":"Casper","url":"//rrrhys.github.io/blog.codeworkshop.com.au/themes/Casper"}}
