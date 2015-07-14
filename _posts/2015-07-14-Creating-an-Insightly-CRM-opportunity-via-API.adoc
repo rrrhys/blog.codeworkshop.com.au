@@ -100,4 +100,5 @@ add_action('gform_after_submission', 'post_to_insightly', 10, 2);
 ```
 Good luck!
 
-If you are undertaking an Insightly or other CRM package integration, please get in touch.
+
+:hp-image: cover-insightly.png
