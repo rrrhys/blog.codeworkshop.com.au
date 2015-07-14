@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Creating an Insightly CRM opportunity via API</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//blog.codeworkshop.com.au/themes/Casper/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//blog.codeworkshop.com.au/themes/Casper/assets/css/screen.css?v=1.0.0" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html" />
+    
+    <meta property="og:site_name" content="Code Workshop" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Creating an Insightly CRM opportunity via API" />
+    <meta property="og:description" content="Recently I had a query from a potential client about using a Gravity Form to raise an opportunity in their Insightly CRM system. After some quick research it was clear Insightly CRM have a super smooth API, and the Gravity..." />
+    <meta property="og:url" content="http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html" />
+    <meta property="article:published_time" content="2015-07-13T14:00:00.000Z" />
+    <meta property="article:modified_time" content="2015-07-14T07:27:12.781Z" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Creating an Insightly CRM opportunity via API" />
+    <meta name="twitter:description" content="Recently I had a query from a potential client about using a Gravity Form to raise an opportunity in their Insightly CRM system. After some quick research it was clear Insightly CRM have a super smooth API, and the Gravity..." />
+    <meta name="twitter:url" content="http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Code Workshop",
+    "author": {
+        "@type": "Person",
+        "name": "Rhys Williams",
+        "image": "https://avatars.githubusercontent.com/u/361922?v=3",
+        "url": "undefined/author/undefined",
+        "sameAs": "http://www.codeworkshop.com.au"
+    },
+    "headline": "Creating an Insightly CRM opportunity via API",
+    "url": "http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html",
+    "datePublished": "2015-07-13T14:00:00.000Z",
+    "dateModified": "2015-07-14T07:27:12.781Z",
+    "description": "Recently I had a query from a potential client about using a Gravity Form to raise an opportunity in their Insightly CRM system. After some quick research it was clear Insightly CRM have a super smooth API, and the Gravity..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="Code Workshop" href="http://blog.codeworkshop.com.au/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://blog.codeworkshop.com.au">Home</a>
+        <!-- <a class="subscribe-button icon-feed" href="http://blog.codeworkshop.com.au/rss/">Subscribe</a> -->
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Creating an Insightly CRM opportunity via API</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-07-14">14 July 2015</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Recently I had a query from a potential client about using a Gravity Form to raise an opportunity in their Insightly CRM system.</p>
+</div>
+<div class="paragraph">
+<p>After some quick research it was clear Insightly CRM have a super smooth API, and the Gravity Forms played nice too! I’ve documented below for future reference.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_getting_insightly_crm_ready">Getting Insightly CRM ready</h3>
+<div class="paragraph">
+<p>Create an account, verify your email, and head straight for the User Settings. The point here is to find the API key, which tells Insight.ly that requests are coming from you.</p>
+</div>
+<div class="paragraph">
+<p>Scroll to the very bottom of settings, and grab your API key. Paste it in an empty Word document for now.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Your API key is:XXXXXXXX-9999-9999-9999-d355f999999</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Insightly API allows you to carry out heaps of useful operations; I was looking at Opportunities, which is ‘Sales Leads’ basically.</p>
+</div>
+<div class="paragraph">
+<p>You can list all opportunities, get a specific one, add a new one, update an existing one, and grab all sorts of properties.</p>
+</div>
+<div class="paragraph">
+<p>I needed to add an opportunity so I was after</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>POST /v2/Opportunities</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See a list of all commands at Insightly API (Opportunities)</p>
+</div>
+<div class="paragraph">
+<p>Leave a browser tab open on the API reference for later.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hooking_up_to_gravity_forms">Hooking up to Gravity Forms</h3>
+<div class="paragraph">
+<p>Gravity Forms is a popular form generation tool for WordPress, apparently used by over a million websites. It costs $39-$199 and looks pretty full featured.</p>
+</div>
+<div class="paragraph">
+<p>Gravity Forms make a heap of integration hooks available for wiring up to other services, which is what I used to tie it to Insightly.</p>
+</div>
+<div class="paragraph">
+<p>Hop onto your WordPress server and edit the functions.php file of your active theme. The path to mine was <code>/var/www/wp-content/themes/twentyfourteen/functions.php</code></p>
+</div>
+<div class="paragraph">
+<p>The following code snippet tells WordPress to POST the submitted form off to Insightly as a new opportunity.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>function post_to_insightly($entry, $form) {
+  $post_url = 'https://api.insight.ly/v2/Opportunities';
+  $username = 'XXXXXXXX-9999-9999-9999-d355f999999'; //This is your API key from above!
+  $password = '';
+  $headers = array( 'Authorization' =&gt; 'Basic '.base64_encode("$username:$password") );
+  $object = new stdClass;
+  $object-&gt;OPPORTUNITY_STATE = 'Open';
+  $object-&gt;OPPORTUNITY_DETAILS = "{$entry['1']} {$entry['2']}";
+  $request = new WP_Http();
+  $response = $request-&gt;post($post_url, array('body' =&gt; $object, 'headers' =&gt; $headers));
+}
+
+
+add_action('gform_after_submission', 'post_to_insightly', 10, 2);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>$post_url</code> points to the opportunities section of the Insightly API.</p>
+</div>
+<div class="paragraph">
+<p>The next 3 lines authorise you as the current user (<code>$username &#8230;&#8203;,$password &#8230;&#8203;,$headers &#8230;&#8203;</code>).</p>
+</div>
+<div class="paragraph">
+<p>The object I’m creating in the next 3 lines exactly reflects the items available according to Insightly (refer to the API page you left open above). There’s about 30 fields you can set.</p>
+</div>
+<div class="paragraph">
+<p>I’ve set the <code>‘OPPORTUNITY_STATE’</code> property to <code>'Open'</code>, and the <code>‘OPPORTUNITY_DETAILS’</code> property to <code>"{$entry['1']} {$entry['2']}"</code>. Entry 1 and 2 represent the first two fields of the submitted form.</p>
+</div>
+<div class="paragraph">
+<p>The next two lines (<code>$request &#8230;&#8203; and $response &#8230;&#8203;</code>) bundle up the request and the authorisation information and send it off.</p>
+</div>
+<div class="paragraph">
+<p>Note <code>$request&#8594;post</code> represents a POST request, <code>$request&#8594;get</code> is required for GET (DELETE and PUT are a little bit more work).</p>
+</div>
+<div class="paragraph">
+<p>The final line worth explaining hooks the code we’ve just written (take form input and POST to Insightly) to the <code>gform_after_submission</code> hook. You can find a summary of available hooks at Gravity Forms Developer Docs</p>
+</div>
+<div class="paragraph">
+<p>That’s it! Save your functions.php and submit a new entry through your form. If all goes well, a new opportunity is waiting for you in Insightly.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_if_anything_goes_wrong">If anything goes wrong</h3>
+<div class="paragraph">
+<p>While debugging, I used the following code to study the request I sent to the client and the response I received.</p>
+</div>
+<div class="paragraph">
+<p>This will send the request and kill PHP, leaving you a white page with the information you sent to Insightly and the response you received.</p>
+</div>
+<div class="paragraph">
+<p>A 400 error means you’ve sent some bad information to the Insightly server.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>function post_to_insightly($entry, $form) {
+$post_url = 'https://api.insight.ly/v2/Opportunities';
+$username = 'XXXXXXXX-9999-9999-9999-d355f999999'; //This is your API key from above!
+$password = '';
+$headers = array( 'Authorization' =&gt; 'Basic '.base64_encode("$username:$password") );
+$object = new stdClass;
+$object-&gt;OPPORTUNITY_STATE = 'Open';
+$object-&gt;OPPORTUNITY_DETAILS = "{$entry['1']} {$entry['2']}";
+
+echo json_encode($object);
+$request = new WP_Http();
+echo "&lt;br&gt;&lt;br&gt;";
+echo json_encode(request);
+$response = $request-&gt;post($post_url, array('body' =&gt; $object, 'headers' =&gt; $headers));
+echo "&lt;br&gt;&lt;br&gt;";
+echo json_encode($response);
+die();
+}
+
+add_action('gform_after_submission', 'post_to_insightly', 10, 2);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Good luck!</p>
+</div>
+<div class="paragraph">
+<p>If you are undertaking an Insightly or other CRM package integration, please get in touch.</p>
+</div>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="" style="background-image: url(https://avatars.githubusercontent.com/u/361922?v=3)"><span class="hidden">Rhys Williams's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="">Rhys Williams</a></h4>
+
+                    <p>Read <a href="">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Sydney, NSW, Australia</span>
+                    <span class="author-link icon-link"><a href="http://www.codeworkshop.com.au">http://www.codeworkshop.com.au</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=Creating%20an%20Insightly%20CRM%20opportunity%20via%20API&amp;url=http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.codeworkshop.com.au/2015/07/14/Creating-an-Insightly-CRM-opportunity-via-API.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="http://blog.codeworkshop.com.au">Code Workshop</a> &copy; 2015</section>
+        <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+    </footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/jquery.fitvids.js?v=1.0.0"></script>
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/index.js?v=1.0.0"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18545212-13', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
