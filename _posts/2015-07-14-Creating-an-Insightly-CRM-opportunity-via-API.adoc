@@ -1,0 +1,103 @@
+# Creating an Insightly CRM opportunity via API
+
+Recently I had a query from a potential client about using a Gravity Form to raise an opportunity in their Insightly CRM system.
+
+After some quick research it was clear Insightly CRM have a super smooth API, and the Gravity Forms played nice too! I’ve documented below for future reference.
+
+### Getting Insightly CRM ready
+
+Create an account, verify your email, and head straight for the User Settings. The point here is to find the API key, which tells Insight.ly that requests are coming from you.
+
+Scroll to the very bottom of settings, and grab your API key. Paste it in an empty Word document for now.
+
+    Your API key is:XXXXXXXX-9999-9999-9999-d355f999999
+    
+
+The Insightly API allows you to carry out heaps of useful operations; I was looking at Opportunities, which is ‘Sales Leads’ basically.
+
+You can list all opportunities, get a specific one, add a new one, update an existing one, and grab all sorts of properties.
+
+I needed to add an opportunity so I was after
+
+    POST /v2/Opportunities
+    
+See a list of all commands at Insightly API (Opportunities)
+
+Leave a browser tab open on the API reference for later.
+
+### Hooking up to Gravity Forms
+
+Gravity Forms is a popular form generation tool for WordPress, apparently used by over a million websites. It costs $39-$199 and looks pretty full featured.
+
+Gravity Forms make a heap of integration hooks available for wiring up to other services, which is what I used to tie it to Insightly.
+
+Hop onto your WordPress server and edit the functions.php file of your active theme. The path to mine was `/var/www/wp-content/themes/twentyfourteen/functions.php`
+
+The following code snippet tells WordPress to POST the submitted form off to Insightly as a new opportunity.
+
+```
+function post_to_insightly($entry, $form) {
+  $post_url = 'https://api.insight.ly/v2/Opportunities';
+  $username = 'XXXXXXXX-9999-9999-9999-d355f999999'; //This is your API key from above!
+  $password = '';
+  $headers = array( 'Authorization' => 'Basic '.base64_encode("$username:$password") ); 
+  $object = new stdClass;
+  $object->OPPORTUNITY_STATE = 'Open';
+  $object->OPPORTUNITY_DETAILS = "{$entry['1']} {$entry['2']}";
+  $request = new WP_Http();
+  $response = $request->post($post_url, array('body' => $object, 'headers' => $headers)); 
+}
+
+
+add_action('gform_after_submission', 'post_to_insightly', 10, 2);
+```
+
+The `$post_url` points to the opportunities section of the Insightly API.
+
+The next 3 lines authorise you as the current user (`$username ...,$password ...,$headers ...`).
+
+The object I’m creating in the next 3 lines exactly reflects the items available according to Insightly (refer to the API page you left open above). There’s about 30 fields you can set.
+
+I’ve set the `‘OPPORTUNITY_STATE’` property to `'Open'`, and the `‘OPPORTUNITY_DETAILS’` property to `"{$entry['1']} {$entry['2']}"`. Entry 1 and 2 represent the first two fields of the submitted form.
+
+The next two lines (`$request ... and $response ...`) bundle up the request and the authorisation information and send it off.
+
+Note `$request->post` represents a POST request, `$request->get` is required for GET (DELETE and PUT are a little bit more work).
+
+The final line worth explaining hooks the code we’ve just written (take form input and POST to Insightly) to the `gform_after_submission` hook. You can find a summary of available hooks at Gravity Forms Developer Docs
+
+That’s it! Save your functions.php and submit a new entry through your form. If all goes well, a new opportunity is waiting for you in Insightly.
+
+### If anything goes wrong
+
+While debugging, I used the following code to study the request I sent to the client and the response I received.
+
+This will send the request and kill PHP, leaving you a white page with the information you sent to Insightly and the response you received.
+
+A 400 error means you’ve sent some bad information to the Insightly server.
+
+```
+function post_to_insightly($entry, $form) {
+$post_url = 'https://api.insight.ly/v2/Opportunities';
+$username = 'XXXXXXXX-9999-9999-9999-d355f999999'; //This is your API key from above!
+$password = '';
+$headers = array( 'Authorization' => 'Basic '.base64_encode("$username:$password") ); 
+$object = new stdClass;
+$object->OPPORTUNITY_STATE = 'Open';
+$object->OPPORTUNITY_DETAILS = "{$entry['1']} {$entry['2']}";
+
+echo json_encode($object);
+$request = new WP_Http();
+echo "<br><br>";
+echo json_encode(request);
+$response = $request->post($post_url, array('body' => $object, 'headers' => $headers));
+echo "<br><br>";
+echo json_encode($response);
+die();
+}
+
+add_action('gform_after_submission', 'post_to_insightly', 10, 2);
+```
+Good luck!
+
+If you are undertaking an Insightly or other CRM package integration, please get in touch.
