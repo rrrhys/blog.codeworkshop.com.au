@@ -24,3 +24,5 @@ image::address-validation-kleber-3.gif[]
 
 Get your request key from
 http://kleber.datatools.com.au/setup-kleber/
+
+:hp-image: cover-address-input-capture.png
