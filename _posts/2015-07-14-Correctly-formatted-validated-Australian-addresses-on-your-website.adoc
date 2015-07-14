@@ -1,3 +1,25 @@
-# Test Post
+# Correctly formatted, validated Australian addresses on your website
 
-This is a test post.
+Obtaining correctly formatted, validated, clean Australian addresses through your online store.
+
+Why bother with correct addresses?
+
+- Collecting addresses from your customers is messy business. 
+
+- Trying to clean an address list down the track is intensive and expensive.
+
+- Having an accurate customer list builds business value.
+
+Using DataTools Kleber for correct Australian address verification in an online store ensures that addresses you capture can be delivered to and used for customer contact in the future. 
+
+Obtaining a unique residential identifier can be useful for business domain requirements also - In the client’s case, ensuring a new customer is indeed a new customer when offering significant onboarding discounts.
+
+We integrated the address capture form into an existing WordPress installation using javascript – as a user enters their address keystroke by keystroke, the data is sent off to address validation servers and a list of possible results is returned.
+
+When the list is suitably small enough for the customer to see their street address they click to select their residential address and now we have a perfectly validated street address! 
+
+The underlying code sends the full returned information for storage on the server. The client loads this to a Google Map to visualise campaign effectiveness and concentrations of customers.
+
+
+Get your request key from
+http://kleber.datatools.com.au/setup-kleber/
