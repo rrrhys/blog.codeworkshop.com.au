@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Testing ASP.NET Web API with Javascript</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//blog.codeworkshop.com.au/themes/Casper/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//blog.codeworkshop.com.au/themes/Casper/assets/css/screen.css?v=1.0.0" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html" />
+    
+    <meta property="og:site_name" content="Code Workshop" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Testing ASP.NET Web API with Javascript" />
+    <meta property="og:description" content="ASP.NET Web API encourages creation of a RESTful API by populating controllers with GET (list), GET (record), POST (save), PUT (update) and DELETE (..delete) methods. This allows you to interface with your C# back-end using any front-end - completely..." />
+    <meta property="og:url" content="http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html" />
+    <meta property="og:image" content="http://blog.codeworkshop.com.au/images/cover-js-testing-harness.png" />
+    <meta property="article:published_time" content="2015-07-14T14:00:00.000Z" />
+    <meta property="article:modified_time" content="2015-07-15T13:14:02.095Z" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Testing ASP.NET Web API with Javascript" />
+    <meta name="twitter:description" content="ASP.NET Web API encourages creation of a RESTful API by populating controllers with GET (list), GET (record), POST (save), PUT (update) and DELETE (..delete) methods. This allows you to interface with your C# back-end using any front-end - completely..." />
+    <meta name="twitter:url" content="http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html" />
+    <meta name="twitter:image:src" content="http://blog.codeworkshop.com.au/images/cover-js-testing-harness.png" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Code Workshop",
+    "author": {
+        "@type": "Person",
+        "name": "Rhys Williams",
+        "image": "https://avatars.githubusercontent.com/u/361922?v=3",
+        "url": "undefined/author/undefined",
+        "sameAs": "http://www.codeworkshop.com.au"
+    },
+    "headline": "Testing ASP.NET Web API with Javascript",
+    "url": "http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html",
+    "datePublished": "2015-07-14T14:00:00.000Z",
+    "dateModified": "2015-07-15T13:14:02.095Z",
+    "image": "http://blog.codeworkshop.com.au/images/cover-js-testing-harness.png",
+    "description": "ASP.NET Web API encourages creation of a RESTful API by populating controllers with GET (list), GET (record), POST (save), PUT (update) and DELETE (..delete) methods. This allows you to interface with your C# back-end using any front-end - completely..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="Code Workshop" href="http://blog.codeworkshop.com.au/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head " style="background-image: url(http://blog.codeworkshop.com.au/images/cover-js-testing-harness.png)">
+    <nav class="main-nav overlay clearfix">
+        <a class="back-button icon-arrow-left" href="http://blog.codeworkshop.com.au">Home</a>
+        <!-- <a class="subscribe-button icon-feed" href="http://blog.codeworkshop.com.au/rss/">Subscribe</a> -->
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Testing ASP.NET Web API with Javascript</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-07-15">15 July 2015</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>ASP.NET Web API encourages creation of a RESTful API by populating controllers with GET (list), GET (record), POST (save), PUT (update) and DELETE (..delete) methods.</p>
+</div>
+<div class="paragraph">
+<p>This allows you to interface with your C# back-end using any front-end - completely decoupling your data from UI.</p>
+</div>
+<div class="paragraph">
+<p>In a recent project, I have a user registration form and a persistent window for the user to record daily productivity notes.</p>
+</div>
+<div class="paragraph">
+<p>To allow constant changes and confidence that all aspects of the API are up to scratch, we&#8217;ll be putting together a javascript test harness that can run on demand, to automatically test all API functionality any time we need. This makes for faster bug finding and fixing and round the clock, bug-free, continuous deployment. It also means the API is always up-to-date and fully documented with working code.</p>
+</div>
+<div class="paragraph">
+<p>Any client can perform exactly the same operations that the original desktop application can (mobile application, desktop application, website).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_architecture">Architecture</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>ASP.NET Web API back-end, connecting to a SQL Server database</p>
+</li>
+<li>
+<p>C# Webforms front end client, connecting via asynchronous HttpClient</p>
+</li>
+<li>
+<p>Javascript test harness</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_execution">Execution</h3>
+<div class="paragraph">
+<p>For my javascript test harness to function correctly, I&#8217;ve set up a special tests controller with a 'setup' route. The setup route deletes my 'testing' user and any records associated with him (when it runs correctly, the testing library will clean up after itself, but failing tests might leave some mess in the database)</p>
+</div>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="" style="background-image: url(https://avatars.githubusercontent.com/u/361922?v=3)"><span class="hidden">Rhys Williams's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="">Rhys Williams</a></h4>
+
+                    <p>Read <a href="">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Sydney, NSW, Australia</span>
+                    <span class="author-link icon-link"><a href="http://www.codeworkshop.com.au">http://www.codeworkshop.com.au</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=Testing%20ASP.NET%20Web%20API%20with%20Javascript&amp;url=http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.codeworkshop.com.au/2015/07/15/Testing-ASPNET-Web-API-with-Javascript.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="http://blog.codeworkshop.com.au">Code Workshop</a> &copy; 2015</section>
+        <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+    </footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/jquery.fitvids.js?v=1.0.0"></script>
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/index.js?v=1.0.0"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18545212-13', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
