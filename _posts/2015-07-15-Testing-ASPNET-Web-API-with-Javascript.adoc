@@ -1,0 +1,23 @@
+# Testing ASP.NET Web API with Javascript
+
+ASP.NET Web API encourages creation of a RESTful API by populating controllers with GET (list), GET (record), POST (save), PUT (update) and DELETE (..delete) methods.
+
+This allows you to interface with your C# back-end using any front-end - completely decoupling your data from UI.
+
+In a recent project, I have a user registration form and a persistent window for the user to record daily productivity notes.
+
+To allow constant changes and confidence that all aspects of the API are up to scratch, we'll be putting together a javascript test harness that can run on demand, to automatically test all API functionality any time we need. This makes for faster bug finding and fixing and round the clock, bug-free, continuous deployment. It also means the API is always up-to-date and fully documented with working code. 
+
+Any client can perform exactly the same operations that the original desktop application can (mobile application, desktop application, website).
+
+### Architecture
+
+- ASP.NET Web API back-end, connecting to a SQL Server database
+- C# Webforms front end client, connecting via asynchronous HttpClient
+- Javascript test harness
+
+### Execution
+
+For my javascript test harness to function correctly, I've set up a special tests controller with a 'setup' route. The setup route deletes my 'testing' user and any records associated with him (when it runs correctly, the testing library will clean up after itself, but failing tests might leave some mess in the database)
+
+:hp-image: cover-js-testing-harness.png
