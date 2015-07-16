@@ -1,0 +1,13 @@
+# Mapping DevExpress controls from WinForms controls
+
+|===
+|**WinForms** | **DevExpress**
+|Form         | DevExpress.XtraEditors.XtraForm
+|Button         | DevExpress.XtraEditors.SimpleButton
+|TextBox (Multiline)        | DevExpress.XtraEditors.MemoEdit
+|~         | 3
+|^         | 4
+|+         | 5
+|===
+
+Enable the custom title bar and control box by calling `DevExpress.Skins.SkinManager.EnableFormSkins();` before `InitializeComponent();`.
