@@ -12,4 +12,4 @@
 
 Enable the custom title bar and control box by calling `DevExpress.Skins.SkinManager.EnableFormSkins();` before `InitializeComponent();`.
 
-image::devexpress-nice.png
+image::devexpress-nice.png[]
