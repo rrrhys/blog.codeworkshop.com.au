@@ -4,10 +4,12 @@
 |**WinForms** | **DevExpress**
 |Form         | DevExpress.XtraEditors.XtraForm
 |Button         | DevExpress.XtraEditors.SimpleButton
+|TextBox (Single line)        | DevExpress.XtraEditors.TextEdit
 |TextBox (Multiline)        | DevExpress.XtraEditors.MemoEdit
-|~         | 3
-|^         | 4
-|+         | 5
+|Label         | DevExpress.XtraEditors.LabelControl
+|LinkLabel         | Customise DevExpress.XtraEditors.LabelControl :(
 |===
 
 Enable the custom title bar and control box by calling `DevExpress.Skins.SkinManager.EnableFormSkins();` before `InitializeComponent();`.
+
+:image: devexpress-nice.png
