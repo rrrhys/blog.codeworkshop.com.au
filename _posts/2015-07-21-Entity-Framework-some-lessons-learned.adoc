@@ -1,0 +1,10 @@
+# Entity Framework - some lessons learned.
+
+### 1. For your debugging sanity, wrap your Entities class
+
+Entity Framework gives some insightful error messages, like 'an error has occurred.'
+
+Wrap your entities class and override `SaveChanges()` with a detailed error handler.
+
+pass:[<script src="https://gist.github.com/rrrhys/2798a5f2591af18bd5a9.js"></script>]
+
