@@ -72,4 +72,4 @@ Bundled in the cost of our government development program is comprehensive 'trai
 
 Code Workshop would love to work with your local council/city/government organisation in your website redevelopment process. We have the experience, know-how and patience to deliver your modern and user-friendly website.
 
-:hp-image: council-chamber.png
+:hp-image: bins.png
