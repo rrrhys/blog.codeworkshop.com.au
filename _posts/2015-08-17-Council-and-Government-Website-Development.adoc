@@ -75,4 +75,6 @@ Bundled in the cost of our government development program is comprehensive 'trai
 
 Code Workshop would love to work with your local council/city/government organisation in your website redevelopment process. We have the experience, know-how and patience to deliver your modern and user-friendly website.
 
+Take a look at our demo website at http://council.codeworkshop.com.au/ which makes use of all the functionality I mentioned above.
+
 :hp-image: bins.jpg
