@@ -19,7 +19,7 @@ Our government package includes:
 - Integration with external CRM, data providers, API's
 - Comprehensive training materials, workflows and documentation for staff.
 
-##### Most importantly, the package comes with a modern, on-brand, customised design.
+ Most importantly, the package comes with a modern, on-brand, customised design.
 
 
 
