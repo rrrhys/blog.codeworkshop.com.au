@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>On the road to better Javascript with Setters &amp; Getters</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//blog.codeworkshop.com.au/themes/Casper/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//blog.codeworkshop.com.au/themes/Casper/assets/css/screen.css?v=1.0.0" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html" />
+    
+    <meta property="og:site_name" content="Code Workshop" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="On the road to better Javascript with Setters &amp; Getters" />
+    <meta property="og:description" content="Using Accessors or Properties for proper encapsulation of functionality As a free-form, loosely typed language Javascript polarises developers - we love it or hate it for it&amp;#8217;s freedom, lack of rules, and nobody telling you how to do..." />
+    <meta property="og:url" content="http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html" />
+    <meta property="article:published_time" content="2015-09-17T14:00:00.000Z" />
+    <meta property="article:modified_time" content="2015-09-18T07:27:17.164Z" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="On the road to better Javascript with Setters &amp; Getters" />
+    <meta name="twitter:description" content="Using Accessors or Properties for proper encapsulation of functionality As a free-form, loosely typed language Javascript polarises developers - we love it or hate it for it&amp;#8217;s freedom, lack of rules, and nobody telling you how to do..." />
+    <meta name="twitter:url" content="http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Code Workshop",
+    "author": {
+        "@type": "Person",
+        "name": "Rhys Williams",
+        "image": "https://avatars.githubusercontent.com/u/361922?v=3",
+        "url": "undefined/author/undefined",
+        "sameAs": "http://www.codeworkshop.com.au"
+    },
+    "headline": "On the road to better Javascript with Setters &amp; Getters",
+    "url": "http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html",
+    "datePublished": "2015-09-17T14:00:00.000Z",
+    "dateModified": "2015-09-18T07:27:17.164Z",
+    "description": "Using Accessors or Properties for proper encapsulation of functionality As a free-form, loosely typed language Javascript polarises developers - we love it or hate it for it&amp;#8217;s freedom, lack of rules, and nobody telling you how to do..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="Code Workshop" href="http://blog.codeworkshop.com.au/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://blog.codeworkshop.com.au">Home</a>
+        <!-- <a class="subscribe-button icon-feed" href="http://blog.codeworkshop.com.au/rss/">Subscribe</a> -->
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">On the road to better Javascript with Setters &amp; Getters</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-09-18">18 September 2015</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div class="sect2">
+<h3 id="_using_accessors_or_properties_for_proper_encapsulation_of_functionality">Using Accessors or Properties for proper encapsulation of functionality</h3>
+<div class="paragraph">
+<p>As a free-form, loosely typed language Javascript polarises developers - we love it or hate it for it&#8217;s freedom, lack of rules, and nobody telling you how to do X.</p>
+</div>
+<div class="paragraph">
+<p>I do the bulk of my programming in C#, which forces constructors (initialising a class with default values) and encourages the use of properties to encapsulate functionality.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_js_a_basic_object">JS: A basic object</h3>
+<div class="paragraph">
+<p>My early work in javascript was basically if I need an object, make an object.</p>
+</div>
+<div class="paragraph">
+<p>If that object needs some more properties? Just add them! It makes for super fast development, and untestable and unmaintainable code.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var people = [];
+people.push(
+  {name: rhys, occupation: developer, contactable: true},
+  {name: sam, occupation: unemployed, contactable: false}
+);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is quick, nasty and easy. If you need to change contactable, grab the object, flip the boolean and keep going.</p>
+</div>
+<div class="paragraph">
+<p>What if you need to update it in the DOM too? In the past, you just update it while you&#8217;re there.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>person.contactable = false;
+person.parentNode = doNotContact;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As your codebase grows and your contactable field is used more and more, you have this same piece of code duplicated throughout your code base. The logical next step is to refactor this to a function, so you don&#8217;t accidentally change one without the other (you still can though, and you will when you revisit the code base in 6 months&#8230;&#8203;) -</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>function setPersonContactableFlag(person, contactable){
+  person.contactable = contactable;
+  person.parentNode = contactable ? doContact : doNotContact;
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you begin to work with more and more types of these objects, your code becomes littered with helper functions and modifiers like this - it makes for an unmaintainable, untestable and unfollowable codebase</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_js_classes">JS: Classes</h3>
+<div class="paragraph">
+<p>Javascript has a funny way of representing classes which works great, once you get used to it.</p>
+</div>
+<div class="paragraph">
+<p>A class is just a function. The function itself is also the constructor. The function itself houses private and public fields and allows you to expose accessors that can hide away complexity (such as the contactable flag above).</p>
+</div>
+<div class="sect3">
+<h4 id="_public_fields">Public fields</h4>
+<div class="paragraph">
+<p>Public fields are represented by 'this'.</p>
+</div>
+<div class="paragraph">
+<p><code>this.age</code>,
+<code>this.salary</code>.</p>
+</div>
+<div class="paragraph">
+<p>Developers can modify these fields directly.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_private_fields">Private fields</h3>
+<div class="paragraph">
+<p>Private fields do not exist outside the class, and are inaccessible by developers working with the class (you in 6 months!).</p>
+</div>
+<div class="paragraph">
+<p>Private fields are denoted by 'var', and often stand out more if they begin with an <code>_</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>var _contactable</code>, <code>var _parentNode</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessors_getters_setters">Accessors / Getters &amp; Setters</h3>
+<div class="paragraph">
+<p>Getters and Setters are functions that run whenever the developer attempts to read or write a property. The function can modify values on the fly, validate data, reject updates, or run 'side-effect' code.</p>
+</div>
+<div class="paragraph">
+<p>In the example above, a Setter applied to 'contactable' would modify the parentNode property (and possibly update the DOM!) without the developer worrying about that complexity.</p>
+</div>
+<div class="paragraph">
+<p>The syntax is very wierd and verbose.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this.__defineSetter__("contactable", function(value){
+       _contactable = value;
+       if(value === true){
+         _parentNode = doContact; //accessing the field directly.
+       }
+       else{
+         _parentNode = doNotContact;
+       }
+
+       // update the DOM, trigger a server update, etc etc.
+
+    });</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The horrible syntax above now hides the complexity of our business rules attached to the class, so the developer doesn&#8217;t need to wade through helper functions and 'side-effect' code when working with the class. He can call <code>person.contactable = true</code>, knowing the class is handling the heavy lifting.</p>
+</div>
+<div class="sect3">
+<h4 id="_defining_the_class">Defining the class</h4>
+<div class="literalblock">
+<div class="content">
+<pre>function Person(name, occupation, contactable){
+  var _contactable;
+  var _occupation;
+
+  this.__defineSetter__("contactable", function(value){
+    _contactable = value;
+    if(value === true){
+         _parentNode = doContact; //accessing the field directly.
+    }
+    else{
+         _parentNode = doNotContact;
+    }
+       // update the DOM, trigger a server update, etc etc.
+  });
+
+    //passes the field in the constructor through the setter, triggering the side effect code
+    this.contactable = contactable
+
+    //(alternatively)
+    _contactable = contactable //assigns the field directly, skipping the side effect code.
+
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the complexity of writing and setting up the class, the developer no longer has unrestricted access to Person.contactable.</p>
+</div>
+<div class="paragraph">
+<p>If they write to it, it passes through the setter function to run the ancillary code.</p>
+</div>
+<div class="paragraph">
+<p>_contactable is inaccessible outside the class context and cannot be modified in the code!</p>
+</div>
+<div class="paragraph">
+<p>It feels quite hacky at first, but once you start abstracting away and hiding your plumbing code in the class constructs, the code base simplifies enormously. Five lines of processing removed from five spots in the code can reduce a screen full of code to test, maintain and debug.</p>
+</div>
+</div>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="" style="background-image: url(https://avatars.githubusercontent.com/u/361922?v=3)"><span class="hidden">Rhys Williams's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="">Rhys Williams</a></h4>
+
+                    <p>Read <a href="">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Sydney, NSW, Australia</span>
+                    <span class="author-link icon-link"><a href="http://www.codeworkshop.com.au">http://www.codeworkshop.com.au</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=On%20the%20road%20to%20better%20Javascript%20with%20Setters%20%26%20Getters&amp;url=http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.codeworkshop.com.au/2015/09/18/On-the-road-to-better-Javascript-with-Setters-and-Getters.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="http://blog.codeworkshop.com.au">Code Workshop</a> &copy; 2015</section>
+        <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+    </footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/jquery.fitvids.js?v=1.0.0"></script>
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/index.js?v=1.0.0"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18545212-13', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
