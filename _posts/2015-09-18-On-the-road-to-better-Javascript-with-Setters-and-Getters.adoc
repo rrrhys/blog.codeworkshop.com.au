@@ -121,7 +121,7 @@ _contactable is inaccessible outside the class context and cannot be modified in
 It feels quite hacky at first, but once you start abstracting away and hiding your plumbing code in the class constructs, the code base simplifies enormously. Five lines of processing removed from five spots in the code can reduce a screen full of code to test, maintain and debug.
 
 
-
+:hp-image: better-js.png
 
 
 
