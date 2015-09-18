@@ -1,0 +1,127 @@
+# Better Javascript with Setters & Getters
+
+### Using Accessors or Properties for proper encapsulation of functionality
+
+As a free-form, loosely typed language Javascript polarises developers - we love it or hate it for it's freedom, lack of rules, and nobody telling you how to do X.
+
+I do the bulk of my programming in C#, which forces constructors (initialising a class with default values) and encourages the use of properties to encapsulate functionality.
+
+### JS: A basic object
+
+My early work in javascript was basically if I need an object, make an object. 
+
+If that object needs some more properties? Just add them! It makes for super fast development, and untestable and unmaintainable code.
+
+....
+var people = [];
+people.push(
+  {name: rhys, occupation: developer, contactable: true}, 
+  {name: sam, occupation: unemployed, contactable: false}
+);
+....
+
+This is quick, nasty and easy. If you need to change contactable, grab the object, flip the boolean and keep going.
+
+What if you need to update it in the DOM too? In the past, you just update it while you're there.
+
+....
+person.contactable = false;
+person.parentNode = doNotContact;
+....
+
+As your codebase grows and your contactable field is used more and more, you have this same piece of code duplicated throughout your code base. The logical next step is to refactor this to a function, so you don't accidentally change one without the other (you still can though, and you will when you revisit the code base in 6 months...) - 
+
+.... 
+function setPersonContactableFlag(person, contactable){
+  person.contactable = contactable;
+  person.parentNode = contactable ? doContact : doNotContact;
+}
+....
+
+As you begin to work with more and more types of these objects, your code becomes littered with helper functions and modifiers like this - it makes for an unmaintainable, untestable and unfollowable codebase
+
+### JS: Classes
+
+Javascript has a funny way of representing classes which works great, once you get used to it.
+
+A class is just a function. The function itself is also the constructor. The function itself houses private and public fields and allows you to expose accessors that can hide away complexity (such as the contactable flag above).
+
+#### Public fields
+Public fields are represented by 'this'.
+
+`this.age`, 
+`this.salary`. 
+
+Developers can modify these fields directly.
+
+### Private fields
+Private fields do not exist outside the class, and are inaccessible by developers working with the class (you in 6 months!).
+
+Private fields are denoted by 'var', and often stand out more if they begin with an `_`.
+
+`var _contactable`, `var _parentNode`
+
+### Accessors / Getters & Setters
+Getters and Setters are functions that run whenever the developer attempts to read or write a property. The function can modify values on the fly, validate data, reject updates, or run 'side-effect' code.
+
+In the example above, a Setter applied to 'contactable' would modify the parentNode property (and possibly update the DOM!) without the developer worrying about that complexity.
+
+The syntax is very wierd and verbose.
+
+....
+this.__defineSetter__("contactable", function(value){
+       _contactable = value;
+       if(value === true){
+         _parentNode = doContact; //accessing the field directly.
+       }
+       else{
+         _parentNode = doNotContact;
+       }
+       
+       // update the DOM, trigger a server update, etc etc.
+
+    });
+....
+
+
+The horrible syntax above now hides the complexity of our business rules attached to the class, so the developer doesn't need to wade through helper functions and 'side-effect' code when working with the class. He can call `person.contactable = true`, knowing the class is handling the heavy lifting.
+
+#### Defining the class
+....
+function Person(name, occupation, contactable){
+  var _contactable;
+  var _occupation;
+    
+  this.__defineSetter__("contactable", function(value){
+    _contactable = value;
+    if(value === true){
+         _parentNode = doContact; //accessing the field directly.
+    }
+    else{
+         _parentNode = doNotContact;
+    }
+       // update the DOM, trigger a server update, etc etc.
+  });
+  
+    //passes the field in the constructor through the setter, triggering the side effect code
+    this.contactable = contactable 
+    
+    //(alternatively)    
+    _contactable = contactable //assigns the field directly, skipping the side effect code.
+    
+}
+....
+
+After the complexity of writing and setting up the class, the developer no longer has unrestricted access to Person.contactable. 
+
+If they write to it, it passes through the setter function to run the ancillary code.
+
+_contactable is inaccessible outside the class context and cannot be modified in the code!
+
+It feels quite hacky at first, but once you start abstracting away and hiding your plumbing code in the class constructs, the code base simplifies enormously. Five lines of processing removed from five spots in the code can reduce a screen full of code to test, maintain and debug.
+
+
+
+
+
+
