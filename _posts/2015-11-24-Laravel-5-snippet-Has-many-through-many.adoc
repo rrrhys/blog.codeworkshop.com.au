@@ -1,0 +1,26 @@
+# Laravel 5 snippet - Has many through many.
+
+A current project has a requirement that users can share their jobs with other users.
+
+The dummy model is `User->UserWhoHasSharedWithMe->Jobs`
+
+First up is joining the user to those who have shared with them.
+
+The join table has unconventional names, because it's joining the Users table back to itself.
+
+.Table Schema of users_shared_with_users table
+|===
+|id|shared_from_id|shared_with_id
+|===
+
+The following relationship will return a collection of users who have shared their details with me:
+
+    public function UsersWhoHaveSharedWithMe(){
+        return $this->belongsToMany(
+          'App\User', 
+          "users_shared_with_users", 
+          "shared_with_id", 
+          "shared_from_id"
+        );
+    }
+    
