@@ -15,6 +15,7 @@ The join table has unconventional names, because it's joining the Users table ba
 
 The following relationship will return a collection of users who have shared their details with me:
 
+.Returning all users who have chosen to share with me
     public function UsersWhoHaveSharedWithMe(){
         return $this->belongsToMany(
           'App\User', 
@@ -24,3 +25,11 @@ The following relationship will return a collection of users who have shared the
         );
     }
     
+After working on a `hasManyThroughMany` type setup, dropping back to eloquent joins provides a concise way to return all jobs belonging to other users that I can access.
+
+.Returning all jobs belonging to other users (who have chosen to share with me)
+    public function JobsSharedWithMe(){
+        return $this->UsersWhoHaveSharedWithMe()->join('jobs', 'jobs.user_id','=','users.id')->select('jobs.*');
+    }
+    
+There you have it - simple has many through many relationship.
