@@ -1,0 +1,66 @@
+# Real life tips for using Vue.Js & Laravel 5.
+
+It took me some convincing to see the point of using an MV* JS framework, and I haven't looked back since.
+
+Vue.js is a front-end Javascript library with inspiration from Angular.js. The power of Vue.js is in it's reactive data model. This means changes to a data property update in real-time in both the UI and application state - hiding and showing page elements, enabling and disabling functionality, and updating form elements that are bound to the data property.
+
+For example:
+
+`<input type='checkbox' v-model='show-settings' value='1' />`
+
+`<div v-if='show-settings'>... Settings goes here</div>`
+
+The existence of the div is based solely on whether the checkbox is ticked. The same functionality takes 4-5 lines of jquery to set the initial state and update the UI when changes occur.
+
+Elements of a web application are broken up into components - modules of compartmentalised and reusable layout and code.
+
+#### Keep local data structures inside components
+Don't pollute your global namespace with variables and structures that will only ever be used inside a component.
+
+In the above example (using `show-settings`), show-settings belongs in the local component data.
+
+#### But don't be scared to share data
+In my early work with vue.js, I find passing data back and forth between parent and child, or root and node to be cumbersome, error prone, and hides away application functionality.
+
+For passing data back and forth between components, keep a window.shared_state object handy.
+
+For example - once authenticating, your `user` object will need to be referenced all over the place. Assign it to `window.shared_state`, and bind a local `shared_state` object of each component to the window component.
+
+
+.Create a shared object and attach to the window.
+    var shared_state = {
+      user: {
+        email: "",
+      },
+      token_status: 'ok',
+      jobs: [],
+    };
+    window.shared_state = shared_state;
+    
+.And assign it inside your local data object (in the component).
+
+    data: function () {
+        return {
+            job: {
+                shared_state: shared_state,
+            },
+        }
+    },
+    
+Any updates to 'shared_state' anywhere in the application will now be available in this object.
+
+#### Update the server in real time
+
+One of the enormous improvements over jQuery and the like is nearly hands-off data updates.
+Add a `this.$watch` inside a component to trigger an activity whenever the data structure changes (e.g., update the server!)
+
+The power here is that you don't need to keep tabs of where in your application an update to the data structure occurs. If the user has updated the data using the UI, it will automatically be posted off to the server -- another small improvement to the growing list.
+
+
+.If anything is updated on the user model, update the server.
+        this.$watch('shared_state.user', function (u, o) {
+            this.$http.put("/api/v1/users/" + u.id, u, function (response) {
+                shared_state.user = response.user;
+            });
+        }, {deep: true});
+        
