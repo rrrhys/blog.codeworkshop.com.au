@@ -102,4 +102,4 @@ All routing takes place inside the `<router-view>` element, in the selector you'
         </div>
     </div>
     
-    :hp-image: spa.PNG
+:hp-image: spa.PNG
