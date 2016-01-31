@@ -1,0 +1,30 @@
+# Worked on this week
+
+We're working on a variety of projects currently.
+
+---
+
+*Parse*, the popular backend-as-a-service, owned by Facebook, released news this week that they are shuttering their services in 12 months time. The service is used by hundreds of thousands of developers and nearly as many apps - mobile, server-side (oddly enough) and desktop.
+
+We are working on a migration strategy with clients who have deployed apps in the last 2 years, so that their apps (and users) have as smooth a transition as possible. The Parse development team have released ~75% of the environment as open source code, making things much easier.
+
+Other respected backend-as-a-service platforms like Firebase will surely take a hit because of Parse being shuttered - how can you trust one with data now? There was a great fit for low volume apps, MVP's and side projects where Parse slotted in perfectly - unfortunately none of those scream revenue.
+
+---
+
+
+*Afterpay* is an Australian payment gateway for eCommerce stores allowing customers to make purchases today and pay in instalments over the next 60 days. Psychologically this helps customers justify their purchase and removes barriers to purchase.
+
+This week we wrote an Afterpay plug-in for the OpenCart platform, deployed for a client. Their eCommerce store now accepts customer purchases which will be paid over the next 2 months (however they are paid quickly by Afterpay!). The OpenCart platform does not have the ecosystem that WooCommerce, Magento et al have so it was a pretty involved development process.
+
+  
+---
+
+
+*Instagram* isn't a social network I've spent a lot of time with. This week we deployed a responsive, real-time Instagram widget to an eCommerce store which is heavily driven by social media engagement. The existing widgets are half-baked, often don't work over SSL and the responsive design is sketchy. link:http://www.blackswallow.com.au[Ours is perfect]! We also cooked up some other tools to extend reach such as an aggressive social-media opt-in.
+
+
+---
+
+
+We're working on an *Angular/Ionic* app that is polishing up nicely.
