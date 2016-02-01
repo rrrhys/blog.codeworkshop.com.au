@@ -26,5 +26,9 @@ This week we wrote an Afterpay plug-in for the OpenCart platform, deployed for a
 
 ---
 
+In 2015 we created a *custom ERP system* for a brewery in Sydney. We're back working on some fine tuning and releasing a few more features for the product.
+
+---
+
 
 We're working on an *Angular/Ionic* app that is polishing up nicely.
