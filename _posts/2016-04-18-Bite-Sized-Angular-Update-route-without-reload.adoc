@@ -1,0 +1,2 @@
+# Bite Sized Angular: Update route without reload
+
