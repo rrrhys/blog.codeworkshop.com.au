@@ -28,3 +28,7 @@ I can't count how many times I've come back and changed an `is_completed` field 
 It is however 1000 times better than dumping it. If you're getting a response from an external API that you might need to parse later (hint: you'll always need to parse it later) store it now. Of course, _don't include it in your indices_ and forget about the DB size - what are you paying for disk space? It generally rounds down pretty close to zero.
 
 *About migrations* - I've never found a workflow that isn't a clunky pain to use. Git is popular because it's easy, and becomes part of your workflow. Database migrations break up your flow, have you digging through code and hacking files apart. Make a database schema diff part of your deploy procedure and do away with migrations.
+
+###Bonus tip! - store all currency values in cents###
+
+Life will be so much easier, you'll see. No more floating points.
