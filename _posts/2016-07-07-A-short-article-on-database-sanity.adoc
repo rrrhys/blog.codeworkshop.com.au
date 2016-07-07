@@ -1,0 +1,30 @@
+# A short article on database sanity.
+
+I've been working in DB schemas a lot lately, including making and correcting my own errors.
+
+Here's a few rules to consistent and guessable field names. Every time you save a round-trip to the database schema, you've won time.
+
+*Dates* finish with _at, and are always nullable/default null.
+
+- created_at
+- updated_at
+- refunded_at
+
+*Boolean* fields always start with is_. You can usually default to a state of 0 or 1 if you think about it, and it's one more application state you don't have to cover.
+
+- is_refund
+- is_customer
+
+*Just snake case it.* There's pretty good arguments for either way. Pick one and stick with it. Snake case however will separate your model properties/attributes from model functions and methods (which should be camel cased). created_at, not createdAt or CreatedAt.
+
+*An important note about booleans* - are you throwing away information by using a boolean? If you think a datetime _might_ be useful in the future, just use a datetime. 
+
+I can't count how many times I've come back and changed an `is_completed` field to a `completed_at` field. Timestamps are worth their weight in gold for audit trails and reports. This is not the place to get clever and save a few bytes.
+
+*A primary key or a foreign key* - ALWAYS ends in _id (or is just named id). user_id, account_id, token_id, job_id. 
+
+*Storing JSON* - There's perfectly good reasons to store JSON in your database. Pretty often it's not queryable, and no it's not the optimal place to put it. If you do store it, suffix it with _json. `response_json`
+
+It is however 1000 times better than dumping it. If you're getting a response from an external API that you might need to parse later (hint: you'll always need to parse it later) store it now.
+
+*About migrations* - I've never found a workflow that isn't a clunky pain to use. Git is popular because it's easy, and becomes part of your workflow. Database migrations break up your flow, have you digging through code and hacking files apart. Make a database schema diff part of your deploy procedure and do away with migrations.
