@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>A short article on database sanity.</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//blog.codeworkshop.com.au/themes/Casper/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//blog.codeworkshop.com.au/themes/Casper/assets/css/screen.css?v=1.0.0" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html" />
+    
+    <meta property="og:site_name" content="Code Workshop" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="A short article on database sanity." />
+    <meta property="og:description" content="I&amp;#8217;ve been working in DB schemas a lot lately, including making and correcting my own errors. Here&amp;#8217;s a few rules to consistent and guessable field names. Every time you save a round-trip to the database schema,..." />
+    <meta property="og:url" content="http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html" />
+    <meta property="article:published_time" content="2016-07-06T14:00:00.000Z" />
+    <meta property="article:modified_time" content="2016-07-07T06:59:47.551Z" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="A short article on database sanity." />
+    <meta name="twitter:description" content="I&amp;#8217;ve been working in DB schemas a lot lately, including making and correcting my own errors. Here&amp;#8217;s a few rules to consistent and guessable field names. Every time you save a round-trip to the database schema,..." />
+    <meta name="twitter:url" content="http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Code Workshop",
+    "author": {
+        "@type": "Person",
+        "name": "Rhys Williams",
+        "image": "https://avatars.githubusercontent.com/u/361922?v=3",
+        "url": "undefined/author/undefined",
+        "sameAs": "http://www.codeworkshop.com.au"
+    },
+    "headline": "A short article on database sanity.",
+    "url": "http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html",
+    "datePublished": "2016-07-06T14:00:00.000Z",
+    "dateModified": "2016-07-07T06:59:47.551Z",
+    "description": "I&amp;#8217;ve been working in DB schemas a lot lately, including making and correcting my own errors. Here&amp;#8217;s a few rules to consistent and guessable field names. Every time you save a round-trip to the database schema,..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="Code Workshop" href="http://blog.codeworkshop.com.au/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://blog.codeworkshop.com.au">Home</a>
+        <!-- <a class="subscribe-button icon-feed" href="http://blog.codeworkshop.com.au/rss/">Subscribe</a> -->
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">A short article on database sanity.</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-07-07">07 July 2016</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div class="paragraph">
+<p>I&#8217;ve been working in DB schemas a lot lately, including making and correcting my own errors.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a few rules to consistent and guessable field names. Every time you save a round-trip to the database schema, you&#8217;ve won time.</p>
+</div>
+<div class="paragraph">
+<p><strong>Dates</strong> finish with _at, and are always nullable/default null.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>created_at</p>
+</li>
+<li>
+<p>updated_at</p>
+</li>
+<li>
+<p>refunded_at</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Boolean</strong> fields always start with is_. You can usually default to a state of 0 or 1 if you think about it, and it&#8217;s one more application state you don&#8217;t have to cover.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>is_refund</p>
+</li>
+<li>
+<p>is_customer</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Just snake case it.</strong> There&#8217;s pretty good arguments for either way. Pick one and stick with it. Snake case however will separate your model properties/attributes from model functions and methods (which should be camel cased). created_at, not createdAt or CreatedAt.</p>
+</div>
+<div class="paragraph">
+<p><strong>An important note about booleans</strong> - are you throwing away information by using a boolean? If you think a datetime <em>might</em> be useful in the future, just use a datetime.</p>
+</div>
+<div class="paragraph">
+<p>I can&#8217;t count how many times I&#8217;ve come back and changed an <code>is_completed</code> field to a <code>completed_at</code> field. Timestamps are worth their weight in gold for audit trails and reports. This is not the place to get clever and save a few bytes.</p>
+</div>
+<div class="paragraph">
+<p><strong>A primary key or a foreign key</strong> - ALWAYS ends in _id (or is just named id). user_id, account_id, token_id, job_id.</p>
+</div>
+<div class="paragraph">
+<p><strong>Storing JSON</strong> - There&#8217;s perfectly good reasons to store JSON in your database. Pretty often it&#8217;s not queryable, and no it&#8217;s not the optimal place to put it. If you do store it, suffix it with _json. <code>response_json</code></p>
+</div>
+<div class="paragraph">
+<p>It is however 1000 times better than dumping it. If you&#8217;re getting a response from an external API that you might need to parse later (hint: you&#8217;ll always need to parse it later) store it now. Of course, <em>don&#8217;t include it in your indices</em> and forget about the DB size - what are you paying for disk space? It generally rounds down pretty close to zero.</p>
+</div>
+<div class="paragraph">
+<p><strong>About migrations</strong> - I&#8217;ve never found a workflow that isn&#8217;t a clunky pain to use. Git is popular because it&#8217;s easy, and becomes part of your workflow. Database migrations break up your flow, have you digging through code and hacking files apart. Make a database schema diff part of your deploy procedure and do away with migrations.</p>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="" style="background-image: url(https://avatars.githubusercontent.com/u/361922?v=3)"><span class="hidden">Rhys Williams's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="">Rhys Williams</a></h4>
+
+                    <p>Read <a href="">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Sydney, NSW, Australia</span>
+                    <span class="author-link icon-link"><a href="http://www.codeworkshop.com.au">http://www.codeworkshop.com.au</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=A%20short%20article%20on%20database%20sanity.&amp;url=http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://blog.codeworkshop.com.au/2016/07/07/A-short-article-on-database-sanity.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="http://blog.codeworkshop.com.au">Code Workshop</a> &copy; 2016</section>
+        <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+    </footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/jquery.fitvids.js?v=1.0.0"></script>
+    <script type="text/javascript" src="//blog.codeworkshop.com.au/themes/Casper/assets/js/index.js?v=1.0.0"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18545212-13', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
