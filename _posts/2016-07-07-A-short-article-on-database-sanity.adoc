@@ -31,4 +31,4 @@ It is however 1000 times better than dumping it. If you're getting a response fr
 
 ###Bonus tip! - store all currency values in cents###
 
-Life will be so much easier, you'll see. No more floating points.
+Life will be so much easier, you'll see. No more floating points. Of course this should be suffixed with cents. `amount_owing_cents`
